@@ -2890,6 +2890,10 @@ static int winusbx_configure_endpoints(int sub_api, struct libusb_device_handle 
 			AUTO_CLEAR_STALL, sizeof(UCHAR), &policy)) {
 			usbi_dbg("failed to enable AUTO_CLEAR_STALL for endpoint %02X", endpoint_address);
 		}
+		if (!WinUSBX[sub_api].SetPipePolicy(winusb_handle, endpoint_address,
+			RAW_IO, sizeof(UCHAR), &policy)) {
+			usbi_dbg("failed to enable RAW_IO for endpoint %02X", endpoint_address);
+		}
 	}
 
 	return LIBUSB_SUCCESS;
