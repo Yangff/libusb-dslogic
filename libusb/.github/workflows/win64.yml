@@ -33,7 +33,7 @@ jobs:
           mkdir install.dir
           cd build
           ../configure --prefix=/mingw64
-          DESTDIR="../install.dir" make install
+          DESTDIR="$PWD/../install.dir" make install
       - name: Package
         run: .github/package.sh
       - name: Upload Artifacts
