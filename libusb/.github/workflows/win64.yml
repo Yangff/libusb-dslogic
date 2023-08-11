@@ -1,0 +1,43 @@
+name: Build Windows 64bit
+on:
+  push:
+    branches: [ master, action ]
+  pull_request:
+    branches: [ master, action ]
+jobs:
+  build:
+    name: Build
+    runs-on: windows-2019
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Install MSYS
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          msystem: MINGW64
+          install: >-
+            mingw-w64-x86_64-pkg-config
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-autotools
+            libtool
+            m4
+            git
+            automake
+      - uses: actions/checkout@v3
+      - name: Build
+        run: |
+          ./bootstrap.sh
+          mkdir build
+          mkdir install.dir
+          cd build
+          ../configure --prefix=/mingw64
+          DESTDIR="../install.dir" make install
+      - name: Package
+        run: .github/package.sh
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: libusb-dslogic
+          path: install.dir/
