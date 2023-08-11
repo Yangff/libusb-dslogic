@@ -1,9 +1,9 @@
 name: Build Windows 64bit
 on:
   push:
-    branches: [ master, action ]
+    branches: [ event-abstraction-v4 ]
   pull_request:
-    branches: [ master, action ]
+    branches: [ event-abstraction-v4 ]
 jobs:
   build:
     name: Build
