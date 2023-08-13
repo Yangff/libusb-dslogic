@@ -2890,10 +2890,6 @@ static int winusbx_configure_endpoints(int sub_api, struct libusb_device_handle 
 			AUTO_CLEAR_STALL, sizeof(UCHAR), &policy)) {
 			usbi_dbg("failed to enable AUTO_CLEAR_STALL for endpoint %02X", endpoint_address);
 		}
-		if (!WinUSBX[sub_api].SetPipePolicy(winusb_handle, endpoint_address,
-			RAW_IO, sizeof(UCHAR), &policy)) {
-			usbi_dbg("failed to enable RAW_IO for endpoint %02X", endpoint_address);
-		}
 	}
 
 	return LIBUSB_SUCCESS;
@@ -3187,6 +3183,14 @@ static int winusbx_submit_bulk_transfer(int sub_api, struct usbi_transfer *itran
 	r = prepare_transfer_priv(itransfer, winusb_handle);
 	if (r)
 		return r;
+
+	if (sub_api == SUB_API_WINUSB) {
+		UCHAR policy = (transfer->length % 512 == 0);
+		if (!WinUSBX[sub_api].SetPipePolicy(winusb_handle, transfer->endpoint,
+			RAW_IO, sizeof(UCHAR), &policy)) {
+			usbi_dbg("failed to enable RAW_IO for endpoint %02X", endpoint_address);
+		}
+	}
 
 	if (IS_XFERIN(transfer)) {
 		usbi_dbg("reading %d bytes", transfer->length);
