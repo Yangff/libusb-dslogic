@@ -3184,6 +3184,7 @@ static int winusbx_submit_bulk_transfer(int sub_api, struct usbi_transfer *itran
 	if (r)
 		return r;
 
+/*
 	if (sub_api == SUB_API_WINUSB) {
 		UCHAR policy = (transfer->length % 512 == 0);
 		if (!WinUSBX[sub_api].SetPipePolicy(winusb_handle, transfer->endpoint,
@@ -3191,6 +3192,7 @@ static int winusbx_submit_bulk_transfer(int sub_api, struct usbi_transfer *itran
 			usbi_dbg("failed to enable RAW_IO for endpoint %02X", transfer->endpoint);
 		}
 	}
+*/
 
 	if (IS_XFERIN(transfer)) {
 		usbi_dbg("reading %d bytes", transfer->length);
