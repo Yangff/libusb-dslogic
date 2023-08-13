@@ -3188,7 +3188,7 @@ static int winusbx_submit_bulk_transfer(int sub_api, struct usbi_transfer *itran
 		UCHAR policy = (transfer->length % 512 == 0);
 		if (!WinUSBX[sub_api].SetPipePolicy(winusb_handle, transfer->endpoint,
 			RAW_IO, sizeof(UCHAR), &policy)) {
-			usbi_dbg("failed to enable RAW_IO for endpoint %02X", endpoint_address);
+			usbi_dbg("failed to enable RAW_IO for endpoint %02X", transfer->endpoint);
 		}
 	}
 
